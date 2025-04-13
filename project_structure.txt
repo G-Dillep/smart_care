@@ -1,0 +1,100 @@
+smartcare_project/
+│
+├── manage.py                       # Django management script
+├── requirements.txt                # List of dependencies
+├── README.md                       # Project description and setup guide
+├── .gitignore                      # Git ignore rules
+│
+├── smartcare/                       # Django project settings
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py                     # Main project URLs (includes app URLs)
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── patient/                         # Patient module
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py                   # Patient model (User, Profile, etc.)
+│   ├── forms.py                    # Registration, Profile forms
+│   ├── views.py                    # Registration, Dashboard views
+│   ├── urls.py                     # URL patterns for patient module
+│   ├── tests.py                    # Unit tests for patient views
+│   ├── templates/
+│   │   └── patient/
+│   │       ├── register.html
+│   │       ├── dashboard.html
+│   │       └── profile.html
+│   └── static/
+│       └── patient/
+│           ├── css/
+│           ├── js/
+│           └── images/
+│
+├── doctor/                          # Doctor module
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py                    # Doctor model (Specialization, etc.)
+│   ├── forms.py                     # Registration, Appointment forms
+│   ├── views.py                     # Appointment handling, Dashboard views
+│   ├── urls.py                      # URL patterns for doctor module
+│   ├── tests.py                     # Unit tests for doctor views
+│   ├── templates/
+│   │   └── doctor/
+│   │       ├── register.html
+│   │       ├── dashboard.html
+│   │       └── appointments.html
+│   └── static/
+│       └── doctor/
+│           ├── css/
+│           ├── js/
+│           └── images/
+│
+├── hospital/                         # Hospital module
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py                    # Hospital model (Departments, Beds, etc.)
+│   ├── forms.py                     # Bed management forms
+│   ├── views.py                     # Bed tracking, Dashboard views
+│   ├── urls.py                      # URL patterns for hospital module
+│   ├── tests.py                     # Unit tests for hospital views
+│   ├── templates/
+│   │   └── hospital/
+│   │       ├── dashboard.html
+│   │       ├── register.html
+│   │       └── bed_availability.html
+│   └── static/
+│       └── hospital/
+│           ├── css/
+│           ├── js/
+│           └── images/
+│
+├── mlmodels/                         # Machine Learning models
+│   ├── __init__.py
+│   ├── knn_model.pkl
+│   ├── rf_model.pkl
+│   ├── logistic_model.pkl
+│   ├── xgboost_model.pkl
+│   ├── lstm_model.h5
+│   ├── utils.py                      # Preprocessing & utils functions
+│   └── predict.py                    # Model loading & prediction logic
+│
+├── templates/                        # Shared templates (base.html, home.html)
+│   ├── base.html
+│   └── home.html
+│
+├── static/                           # Shared static files (CSS, JS, images)
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+├── docs/                             # Documentation (IEEE Paper, Diagrams)
+│   ├── IEEE_Paper.pdf
+│   ├── ER_Diagram.png
+│   ├── Flowchart.png
+│   └── ProjectReport.docx
+│
+└── .gitignore                        # Ignored files for Git (e.g., .env, migrations)

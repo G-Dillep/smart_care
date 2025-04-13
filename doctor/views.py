@@ -1,4 +1,4 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 def home(request):
-    return render(request, 'doctor/home.html')
+    return render(request, 'doctor/doctor_home.html')
