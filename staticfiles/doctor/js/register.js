@@ -1,110 +1,170 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Form elements
     const form = document.getElementById('doctorRegistrationForm');
     const sections = document.querySelectorAll('.form-section');
-    const submitBtn = document.querySelector('.btn-primary');
-    
-    // Add animations to form sections
-    sections.forEach((section, index) => {
-        section.style.animationDelay = `${index * 0.1}s`;
-    });
-    
-    // Form validation with animations
-    form.addEventListener('submit', function(event) {
-        if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-            
-            // Add shake animation to invalid fields
-            const invalidFields = form.querySelectorAll(':invalid');
-            invalidFields.forEach(field => {
-                field.classList.add('animate__animated', 'animate__shakeX');
-                field.addEventListener('animationend', () => {
-                    field.classList.remove('animate__animated', 'animate__shakeX');
-                });
-            });
-        }
-        
-        form.classList.add('was-validated');
-    }, false);
-    
-    // Password confirmation validation
-    const password = document.getElementById('id_password');
-    const confirmPassword = document.getElementById('id_confirm_password');
-    
-    if (password && confirmPassword) {
-        confirmPassword.addEventListener('input', function() {
-            if (password.value !== confirmPassword.value) {
-                confirmPassword.setCustomValidity("Passwords don't match");
-                confirmPassword.classList.add('is-invalid');
-            } else {
-                confirmPassword.setCustomValidity('');
-                confirmPassword.classList.remove('is-invalid');
+    const steps = document.querySelectorAll('.step');
+    let currentSection = 0;
+
+    // Show first section
+    showSection(currentSection);
+
+    // Next button functionality
+    document.querySelectorAll('.btn-next').forEach(button => {
+        button.addEventListener('click', function() {
+            if (validateCurrentSection()) {
+                currentSection++;
+                showSection(currentSection);
             }
         });
-    }
-    
-    // Profile photo preview with animation
-    const profilePhotoInput = document.getElementById('id_profile_photo');
+    });
+
+    // Previous button functionality
+    document.querySelectorAll('.btn-prev').forEach(button => {
+        button.addEventListener('click', function() {
+            currentSection--;
+            showSection(currentSection);
+        });
+    });
+
+    // File preview functionality
+    const profilePhotoInput = document.getElementById('profile_photo');
     if (profilePhotoInput) {
-        profilePhotoInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
+        profilePhotoInput.addEventListener('change', function() {
+            const file = this.files[0];
             if (file) {
-                // Remove existing preview if any
-                let preview = document.getElementById('profilePhotoPreview');
-                if (preview) {
-                    preview.classList.add('animate__animated', 'animate__fadeOut');
-                    preview.addEventListener('animationend', () => {
-                        preview.remove();
-                    });
-                }
-                
-                // Create new preview
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    preview = document.createElement('img');
-                    preview.id = 'profilePhotoPreview';
+                    const preview = document.getElementById('previewImage');
                     preview.src = e.target.result;
-                    preview.classList.add('animate__animated', 'animate__fadeIn');
-                    preview.style.maxWidth = '200px';
-                    preview.style.maxHeight = '200px';
-                    preview.style.marginTop = '10px';
                     preview.style.display = 'block';
-                    preview.style.borderRadius = '8px';
-                    profilePhotoInput.parentNode.appendChild(preview);
-                };
+                    preview.classList.add('animate__animated', 'animate__fadeIn');
+                }
                 reader.readAsDataURL(file);
             }
         });
     }
-    
-    // Add floating label effect to all inputs
-    const floatLabels = document.querySelectorAll('.form-floating');
-    floatLabels.forEach(label => {
-        const input = label.querySelector('.form-control');
-        input.addEventListener('focus', () => {
-            label.classList.add('active');
+
+    // Password confirmation validation
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm_password');
+    if (password && confirmPassword) {
+        confirmPassword.addEventListener('input', function() {
+            if (password.value !== confirmPassword.value) {
+                this.setCustomValidity("Passwords don't match");
+                this.classList.add('is-invalid');
+            } else {
+                this.setCustomValidity('');
+                this.classList.remove('is-invalid');
+            }
         });
-        input.addEventListener('blur', () => {
-            if (!input.value) {
-                label.classList.remove('active');
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (validateForm()) {
+            const submitBtn = document.querySelector('.btn-submit');
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing...';
+            submitBtn.disabled = true;
+            
+            // Submit the form
+            form.submit();
+        }
+    });
+
+    // Helper functions
+    function showSection(index) {
+        // Hide all sections
+        sections.forEach(section => {
+            section.classList.remove('active', 'animate__fadeIn');
+        });
+        
+        // Show current section
+        sections[index].classList.add('active', 'animate__fadeIn');
+        
+        // Update steps
+        updateSteps(index);
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateSteps(currentIndex) {
+        steps.forEach((step, index) => {
+            if (index <= currentIndex) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+    }
+
+    function validateCurrentSection() {
+        const currentSectionEl = sections[currentSection];
+        const inputs = currentSectionEl.querySelectorAll('input, select, textarea, [required]');
+        let isValid = true;
+        
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                input.classList.add('is-invalid');
+                isValid = false;
+                
+                // Add shake animation
+                input.classList.add('animate__animated', 'animate__shakeX');
+                input.addEventListener('animationend', () => {
+                    input.classList.remove('animate__animated', 'animate__shakeX');
+                });
+            } else {
+                input.classList.remove('is-invalid');
             }
         });
         
-        // Initialize if already has value
-        if (input.value) {
-            label.classList.add('active');
+        if (!isValid) {
+            // Scroll to first invalid field
+            const firstInvalid = currentSectionEl.querySelector('.is-invalid');
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalid.focus();
         }
-    });
-    
-    // Button hover effect
-    if (submitBtn) {
-        submitBtn.addEventListener('mouseenter', () => {
-            submitBtn.classList.add('animate__animated', 'animate__pulse');
-        });
-        submitBtn.addEventListener('mouseleave', () => {
-            submitBtn.classList.remove('animate__animated', 'animate__pulse');
-        });
+        
+        return isValid;
     }
-    
-    // Add smooth scrolling to invalid fields
-   
+
+    function validateForm() {
+        let isValid = true;
+        const inputs = form.querySelectorAll('input, select, textarea, [required]');
+        
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                input.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            // Find and show the first invalid section
+            const firstInvalid = form.querySelector('.is-invalid');
+            const invalidSection = firstInvalid.closest('.form-section');
+            const sectionIndex = Array.from(sections).indexOf(invalidSection);
+            
+            showSection(sectionIndex);
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalid.focus();
+        }
+        
+        return isValid;
+    }
+
+    // Add input validation on blur
+    document.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (!this.checkValidity()) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+});

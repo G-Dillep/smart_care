@@ -20,7 +20,7 @@ def register_doctor(request):
             doctor = form.save(commit=False)
             # Optional: Hash password here
             doctor.save()
-            return redirect('doctor/doctors')  # or redirect to 'doctor_list' to verify
+            return redirect('doctor_details')  # or redirect to 'doctor_list' to verify
     else:
         print("Request method is GET")
         print("Request data:", request.GET)
