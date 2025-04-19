@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor List</title>
+</head>
+<body>
+    <div class="container">
+        <h2>List of Doctors</h2>
+        
+        <!-- Table to display doctor details -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Date of Birth</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Specialization</th>
+                    <th>Experience</th>
+                    <th>Hospital/Clinic</th>
+                    <th>Consultation Fee</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doctor in doctors %}
+                <tr>
+                    <td>{{ doctor.full_name }}</td>
+                    <td>{{ doctor.get_gender_display }}</td>
+                    <td>{{ doctor.dob }}</td>
+                    <td>{{ doctor.email }}</td>
+                    <td>{{ doctor.phone }}</td>
+                    <td>{{ doctor.specialization }}</td>
+                    <td>{{ doctor.experience }} years</td>
+                    <td>{{ doctor.hospital_clinic }}</td>
+                    <td>₹{{ doctor.consultation_fee }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="#">Go back to registration</a>
+    </div>
+</body>
+</html>
