@@ -1,4 +1,4 @@
-smartcare_project/
+smart_care/
 │
 ├── manage.py                       # Django management script
 ├── requirements.txt                # List of dependencies
@@ -10,7 +10,8 @@ smartcare_project/
 │   ├── settings.py
 │   ├── urls.py                     # Main project URLs (includes app URLs)
 │   ├── asgi.py
-│   └── wsgi.py
+│   |── wsgi.py
+|   └── views.py   
 │
 ├── patient/                         # Patient module
 │   ├── __init__.py
@@ -25,7 +26,7 @@ smartcare_project/
 │   │   └── patient/
 │   │       ├── register.html
 │   │       ├── dashboard.html
-│   │       └── profile.html
+│   │       └── profile.html etcc...
 │   └── static/
 │       └── patient/
 │           ├── css/
@@ -97,4 +98,4 @@ smartcare_project/
 │   ├── Flowchart.png
 │   └── ProjectReport.docx
 │
-└── .gitignore                        # Ignored files for Git (e.g., .env, migrations)
+└── .gitignore                       

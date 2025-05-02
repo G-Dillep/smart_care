@@ -7,7 +7,7 @@ class Doctor(models.Model):
     full_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     dob = models.DateField()
-    profile_photo = models.ImageField(upload_to='doctor/static/doctor/Registered_doctor_profiles/', blank=True, null=True)
+    profile_photo = models.ImageField(upload_to='doctors/profile_photos/', blank=True, null=True)
 
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=15)
