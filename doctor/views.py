@@ -14,8 +14,6 @@ def home(request):
 
 def register_doctor(request):
     if request.method == 'POST':
-        print("Request method is POST")
-        print("Request data:", request.POST)
         form = DoctorRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             print("Form is valid")
@@ -25,8 +23,6 @@ def register_doctor(request):
             doctor.save()
             return redirect('doctor_details')
     else:
-        print("Request method is GET")
-        print("Request data:", request.GET)
         form = DoctorRegistrationForm()
     return render(request, 'doctor/register.html', {'form': form})
 

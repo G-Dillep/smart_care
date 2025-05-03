@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Registration | SMARTCARE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3a7bd5;
+            --primary-dark: #2c5fb3;
+            --secondary: #00d2ff;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #fd7e14;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .registration-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .registration-card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.3) 0%,
+                rgba(255, 255, 255, 0) 60%
+            );
+            transform: rotate(30deg);
+        }
+
+        .card-header h2 {
+            font-weight: 700;
+            position: relative;
+        }
+
+        .card-header p {
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .card-body {
+            padding: 2rem;
+            background-color: white;
+        }
+
+        /* Form Steps */
+        .form-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-steps::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #e9ecef;
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .step span {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            border: 3px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            color: var(--primary);
+        }
+
+        .step.active span {
+            background-color: white;
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 0 5px rgba(58, 123, 213, 0.2);
+        }
+
+        .step.completed span {
+            background-color: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        /* Form Sections */
+        .form-section {
+            display: none;
+            animation-duration: 0.5s;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-section h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            font-weight: 600;
+        }
+
+        .form-section h3 i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        /* Form Navigation */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-prev, .btn-next {
+            min-width: 120px;
+            font-weight: 500;
+            padding: 0.5rem 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev {
+            background-color: white;
+            border: 1px solid var(--gray);
+            color: var(--gray);
+        }
+
+        .btn-prev:hover {
+            background-color: #f8f9fa;
+            border-color: var(--dark);
+            color: var(--dark);
+        }
+
+        .btn-next {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .btn-next:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateX(5px);
+        }
+
+        /* Form Elements */
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .form-control, .form-select {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 0.25rem rgba(0, 210, 255, 0.25);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+        }
+
+        /* Department Selection */
+        .department-selection {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .department-selection h5 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .form-check {
+            margin-bottom: 0.75rem;
+        }
+
+        .form-check-input {
+            width: 1.2em;
+            height: 1.2em;
+            margin-top: 0.1em;
+        }
+
+        .form-check-label {
+            margin-left: 0.5rem;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Bed Configuration */
+        .bed-configuration {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .bed-configuration h5 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Terms Checkbox */
+        .form-check-input[type="checkbox"] {
+            border-radius: 4px;
+        }
+
+        .form-check-label {
+            user-select: none;
+        }
+
+        /* Error Styling */
+        .is-invalid {
+            border-color: #dc3545;
+            animation: shake 0.5s;
+        }
+
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .form-steps {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .step {
+                width: 50%;
+                margin-bottom: 1rem;
+            }
+            
+            .form-steps::before {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-header {
+                padding: 1rem;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .btn-prev, .btn-next {
+                min-width: auto;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-xl-8">
+                <div class="registration-card animate__animated animate__fadeIn">
+                    <div class="card-header text-white text-center">
+                        <h2><i class="fas fa-hospital me-2"></i> Hospital Registration</h2>
+                        <p class="mb-0">Join our healthcare network and provide exceptional care</p>
+                    </div>
+
+                    <div class="card-body">
+                        <form id="hospitalRegistrationForm" method="post" novalidate>
+                            {% csrf_token %}
+
+                            <!-- Progress Steps -->
+                            <div class="form-steps mb-4">
+                                <div class="step active" data-step="1"><span>1</span> Basic Info</div>
+                                <div class="step" data-step="2"><span>2</span> Contact</div>
+                                <div class="step" data-step="3"><span>3</span> Location</div>
+                                <div class="step" data-step="4"><span>4</span> Departments</div>
+                                <div class="step" data-step="5"><span>5</span> Complete</div>
+                            </div>
+
+                            <!-- Section 1: Basic Info -->
+                            <div class="form-section active" id="section-basic">
+                                <h3 class="mb-4"><i class="fas fa-info-circle me-2"></i> Basic Information</h3>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Hospital Name*</label>
+                                        <input type="text" class="form-control" name="name" required>
+                                        <small class="form-text text-muted">Official name of your hospital</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">License Number*</label>
+                                        <input type="text" class="form-control" name="registration_id" required>
+                                        <small class="form-text text-muted">Government issued license number</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Username*</label>
+                                        <input type="text" class="form-control" name="username" required>
+                                        <small class="form-text text-muted">150 characters or fewer. Letters, digits and @/./+/-/_ only.</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Password*</label>
+                                        <input type="password" class="form-control" name="password1" required>
+                                        <small class="form-text text-muted">Your password must contain at least 8 characters.</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Confirm Password*</label>
+                                        <input type="password" class="form-control" name="password2" required>
+                                        <small class="form-text text-muted">Enter the same password as before, for verification.</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-navigation mt-4">
+                                    <button type="button" class="btn btn-next float-end">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Section 2: Contact Info -->
+                            <div class="form-section" id="section-contact">
+                                <h3 class="mb-4"><i class="fas fa-phone-alt me-2"></i> Contact Information</h3>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone*</label>
+                                        <input type="tel" class="form-control" name="phone" placeholder="+91XXXXXXXXXX" required>
+                                        <small class="form-text text-muted">Primary contact number</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Emergency Phone</label>
+                                        <input type="tel" class="form-control" name="emergency_phone" placeholder="+91XXXXXXXXXX">
+                                        <small class="form-text text-muted">24/7 emergency contact (optional)</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email*</label>
+                                        <input type="email" class="form-control" name="email" required>
+                                        <small class="form-text text-muted">Official email address</small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Website</label>
+                                        <input type="url" class="form-control" name="website" placeholder="https://">
+                                        <small class="form-text text-muted">Hospital website (optional)</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-navigation mt-4">
+                                    <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left me-2"></i> Previous</button>
+                                    <button type="button" class="btn btn-next float-end">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Section 3: Location -->
+                            <div class="form-section" id="section-location">
+                                <h3 class="mb-4"><i class="fas fa-map-marker-alt me-2"></i> Location Details</h3>
+                                
+                                <div class="alert alert-info mb-4">
+                                    <i class="fas fa-info-circle me-2"></i> Please provide accurate location details for better patient accessibility.
+                                </div>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Latitude</label>
+                                        <input type="number" step="0.000001" class="form-control" name="latitude" id="latitude">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Longitude</label>
+                                        <input type="number" step="0.000001" class="form-control" name="longitude" id="longitude">
+                                    </div>
+                                </div>
+                                
+                                <div class="row g-3 mt-2">
+                                    <div class="col-12">
+                                        <label class="form-label">Address*</label>
+                                        <textarea class="form-control" name="address" rows="3" required></textarea>
+                                        <small class="form-text text-muted">Full physical address</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">City*</label>
+                                        <input type="text" class="form-control" name="city" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">State*</label>
+                                        <input type="text" class="form-control" name="state" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Pincode*</label>
+                                        <input type="text" class="form-control" name="pincode" required>
+                                        <small class="form-text text-muted">6-digit postal code</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-navigation mt-4">
+                                    <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left me-2"></i> Previous</button>
+                                    <button type="button" class="btn btn-next float-end">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Section 4: Departments -->
+                            <div class="form-section" id="section-departments">
+                                <h3 class="mb-4"><i class="fas fa-procedures me-2"></i> Departments & Beds</h3>
+                                <p class="text-muted mb-4">Select departments and specify bed counts to help patients find appropriate care</p>
+                                
+                                <div class="department-selection mb-4">
+                                    <h5><i class="fas fa-clipboard-list me-2"></i> Available Departments:</h5>
+                                    <div class="row">
+                                        {% for value, label in form.departments.field.choices %}
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="departments" id="dept-{{ value }}" value="{{ value }}">
+                                                <label class="form-check-label" for="dept-{{ value }}">{{ label }}</label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                
+                                <div class="bed-configuration">
+                                    <h5><i class="fas fa-bed me-2"></i> Bed Configuration:</h5>
+                                    <div id="bedInputsContainer">
+                                        <div class="alert alert-secondary mb-0">
+                                            <i class="fas fa-info-circle me-2"></i> Please select departments above to configure bed counts.
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-navigation mt-4">
+                                    <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left me-2"></i> Previous</button>
+                                    <button type="button" class="btn btn-next float-end">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Section 5: Additional Info -->
+                            <div class="form-section" id="section-complete">
+                                <h3 class="mb-4"><i class="fas fa-clipboard-check me-2"></i> Final Details</h3>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Established Date*</label>
+                                        <input type="date" class="form-control" name="established_date" required>
+                                        <small class="form-text text-muted">Date when hospital was established</small>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Facilities Available</label>
+                                        <textarea class="form-control" name="facilities" rows="3" placeholder="MRI, CT Scan, Pharmacy, Ambulance service..."></textarea>
+                                        <small class="form-text text-muted">List of special facilities available (optional)</small>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Description</label>
+                                        <textarea class="form-control" name="description" rows="3" placeholder="Brief description about your hospital..."></textarea>
+                                        <small class="form-text text-muted">Tell patients about your hospital (optional)</small>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="terms" required>
+                                            <label class="form-check-label" for="terms">
+                                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">terms and conditions</a> *
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-navigation mt-4">
+                                    <button type="button" class="btn btn-prev"><i class="fas fa-arrow-left me-2"></i> Previous</button>
+                                    <button type="submit" class="btn btn-primary float-end">
+                                        <i class="fas fa-paper-plane me-2"></i> Submit Registration
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Hospital Registration Agreement</h6>
+                    <p>By registering your hospital with our platform, you agree to:</p>
+                    <ul>
+                        <li>Provide accurate and up-to-date information about your facility</li>
+                        <li>Maintain the quality of services as described in your profile</li>
+                        <li>Respond to patient inquiries in a timely manner</li>
+                        <li>Keep bed availability information current</li>
+                        <li>Comply with all applicable healthcare regulations</li>
+                    </ul>
+                    <h6 class="mt-4">Data Privacy</h6>
+                    <p>We are committed to protecting your data and will only use it for:</p>
+                    <ul>
+                        <li>Displaying your hospital information to potential patients</li>
+                        <li>Facilitating communication between patients and your facility</li>
+                        <li>Improving our healthcare services platform</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Multi-step form logic
+            const form = document.getElementById('hospitalRegistrationForm');
+            const sections = document.querySelectorAll('.form-section');
+            const steps = document.querySelectorAll('.step');
+            let currentSection = 0;
+
+            // Department selection handler
+            const deptCheckboxes = document.querySelectorAll('input[name="departments"]');
+            deptCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateBedInputs);
+            });
+
+            function updateBedInputs() {
+                const container = document.getElementById('bedInputsContainer');
+                container.innerHTML = '';
+                
+                const selectedDepts = Array.from(deptCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => ({
+                        value: cb.value,
+                        label: cb.nextElementSibling.textContent
+                    }));
+                
+                if (selectedDepts.length === 0) {
+                    container.innerHTML = `
+                        <div class="alert alert-secondary mb-0">
+                            <i class="fas fa-info-circle me-2"></i> Please select departments above to configure bed counts.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                selectedDepts.forEach(dept => {
+                    const div = document.createElement('div');
+                    div.className = 'mb-3 animate__animated animate__fadeIn';
+                    div.innerHTML = `
+                        <label class="form-label">${dept.label} Department</label>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <input type="number" class="form-control" name="${dept.value}_total" placeholder="Total beds" min="0" required>
+                                <small class="form-text text-muted">Total beds in this department</small>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="number" class="form-control" name="${dept.value}_available" placeholder="Available beds" min="0" required>
+                                <small class="form-text text-muted">Currently available beds</small>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            // Form navigation functions
+            function showSection(index) {
+                sections.forEach((section, i) => {
+                    if (i === index) {
+                        section.classList.add('active', 'animate__animated', 'animate__fadeIn');
+                        section.style.display = 'block';
+                    } else {
+                        section.classList.remove('active');
+                        section.style.display = 'none';
+                    }
+                });
+                
+                steps.forEach((step, i) => {
+                    if (i < index) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (i === index) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+                
+                currentSection = index;
+                
+                // Scroll to top of section
+                window.scrollTo({
+                    top: form.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Next/previous button handlers
+            document.querySelectorAll('.btn-next').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (validateSection(currentSection)) {
+                        showSection(currentSection + 1);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.btn-prev').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showSection(currentSection - 1);
+                });
+            });
+
+            // Section validation
+            function validateSection(index) {
+                const section = sections[index];
+                const inputs = section.querySelectorAll('input, select, textarea, [required]');
+                let isValid = true;
+                
+                inputs.forEach(input => {
+                    if (input.type === 'checkbox' && input.required && !input.checked) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                    } else if (input.required && !input.value.trim()) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                    } else if (input.type === 'email' && input.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) {
+                        input.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+                
+                if (!isValid) {
+                    const firstInvalid = section.querySelector('.is-invalid');
+                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstInvalid.focus();
+                    
+                    // Add shake animation to the section
+                    section.classList.add('animate__animated', 'animate__shakeX');
+                    setTimeout(() => {
+                        section.classList.remove('animate__animated', 'animate__shakeX');
+                    }, 1000);
+                }
+                
+                return isValid;
+            }
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing...';
+                    submitBtn.disabled = true;
+                    
+                    // Simulate form submission (replace with actual submission)
+                    setTimeout(() => {
+                        this.submit();
+                    }, 1500);
+                }
+            });
+
+            function validateForm() {
+                let isValid = true;
+                
+                sections.forEach((section, index) => {
+                    if (!validateSection(index)) {
+                        isValid = false;
+                        if (isValid === false) {
+                            showSection(index);
+                        }
+                    }
+                });
+                
+                return isValid;
+            }
+
+            // Initialize first section
+            showSection(0);
+            
+            // Add animation to form elements on focus
+            document.querySelectorAll('.form-control, .form-select').forEach(el => {
+                el.addEventListener('focus', function() {
+                    this.parentElement.classList.add('animate__animated', 'animate__pulse');
+                    setTimeout(() => {
+                        this.parentElement.classList.remove('animate__animated', 'animate__pulse');
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
